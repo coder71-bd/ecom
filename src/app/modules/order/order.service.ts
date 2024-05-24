@@ -18,7 +18,7 @@ const updateOrderIntoDB = async (
   orderId: string,
   orderData: Partial<TOrder>,
 ) => {
-  return Order.findOneAndUpdate({ orderId }, orderData);
+  return Order.findOneAndUpdate({ orderId }, orderData, { new: true });
 };
 
 const deleteOrderFromDB = async (orderId: string) => {

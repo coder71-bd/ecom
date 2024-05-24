@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { validateCreateOrder } from './order.validation';
+import { validateCreateOrder, validateUpdateOrder } from './order.validation';
 import { OrderServices } from './order.service';
 import { ERROR, OK } from '../../utils/responseHelper';
 import { FilterQuery } from 'mongoose';
@@ -51,7 +51,9 @@ const getSingleOrder = async (req: Request, res: Response) => {
 const updateOrder = async (req: Request, res: Response) => {
   try {
     const { orderId } = req.params;
-    const updateBody = req.body;
+    const { email, productId, price, quantity } = req.body;
+
+    const body: Partial<TOrder> = {};
 
     const orderExist = await OrderServices.getSingleOrderFromDB(orderId);
 
@@ -59,7 +61,17 @@ const updateOrder = async (req: Request, res: Response) => {
       return ERROR(res, null, 'Order not found!');
     }
 
-    const result = await OrderServices.updateOrderIntoDB(orderId, updateBody);
+    if (email) body.email = email;
+    if (productId) body.productId = productId;
+    if (price) body.price = price;
+    if (quantity) body.quantity = quantity;
+
+    const zodParsedData = validateUpdateOrder(body);
+
+    const result = await OrderServices.updateOrderIntoDB(
+      orderId,
+      zodParsedData,
+    );
 
     return OK(res, result, 'Order updated successfully!');
   } catch (err: any) {

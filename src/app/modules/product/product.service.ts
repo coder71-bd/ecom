@@ -18,7 +18,7 @@ const updateProductIntoDB = async (
   productId: string,
   productData: Partial<TProduct>,
 ) => {
-  return Product.findOneAndUpdate({ productId }, productData);
+  return Product.findOneAndUpdate({ productId }, productData, { new: true });
 };
 
 const deleteProductFromDB = async (productId: string) => {

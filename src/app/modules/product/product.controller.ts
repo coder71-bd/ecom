@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { validateCreateProduct } from './product.validation';
+import {
+  validateCreateProduct,
+  validateUpdateProduct,
+} from './product.validation';
 import { ProductServices } from './product.service';
 import { ERROR, OK } from '../../utils/responseHelper';
 import { FilterQuery } from 'mongoose';
@@ -58,7 +61,10 @@ const getSingleProduct = async (req: Request, res: Response) => {
 const updateProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
-    const updateBody = req.body;
+    const { name, description, price, tags, category, variants, inventory } =
+      req.body;
+
+    const body: Partial<TProduct> = {};
 
     const productExist =
       await ProductServices.getSingleProductFromDB(productId);
@@ -67,9 +73,19 @@ const updateProduct = async (req: Request, res: Response) => {
       return ERROR(res, null, 'Product not found!');
     }
 
+    if (name) body.name = name;
+    if (description) body.description = description;
+    if (price) body.price = price;
+    if (tags) body.tags = tags;
+    if (category) body.category = category;
+    if (variants) body.variants = variants;
+    if (inventory) body.inventory = inventory;
+
+    const zodParsedData = validateUpdateProduct(body);
+
     const result = await ProductServices.updateProductIntoDB(
       productId,
-      updateBody,
+      zodParsedData,
     );
 
     return OK(res, result, 'Product updated successfully!');
