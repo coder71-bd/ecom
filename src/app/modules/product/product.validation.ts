@@ -31,5 +31,5 @@ const productValidationSchema = z.object({
 });
 
 export const validateProduct = (data: unknown) => {
-  return productValidationSchema.safeParse(data);
+  return productValidationSchema.parse(data);
 };

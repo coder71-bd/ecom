@@ -15,7 +15,6 @@ const orderSchema = new Schema<TOrder, OrderModel>(
     email: {
       type: String,
       required: [true, 'Email is required'],
-      unique: true,
     },
     productId: {
       type: String,
