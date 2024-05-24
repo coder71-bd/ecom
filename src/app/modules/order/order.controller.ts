@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { validateCreateOrder, validateUpdateOrder } from './order.validation';
 import { OrderServices } from './order.service';
+import { Order } from './order.model';
 import { ERROR, OK } from '../../utils/responseHelper';
 import { FilterQuery } from 'mongoose';
 import { TOrder } from './order.interface';
@@ -55,9 +56,7 @@ const updateOrder = async (req: Request, res: Response) => {
 
     const body: Partial<TOrder> = {};
 
-    const orderExist = await OrderServices.getSingleOrderFromDB(orderId);
-
-    if (!orderExist) {
+    if (!(await Order.isOrderExists(orderId))) {
       return ERROR(res, null, 'Order not found!');
     }
 

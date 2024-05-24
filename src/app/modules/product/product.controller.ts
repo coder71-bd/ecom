@@ -7,6 +7,7 @@ import { ProductServices } from './product.service';
 import { ERROR, OK } from '../../utils/responseHelper';
 import { FilterQuery } from 'mongoose';
 import { TProduct } from './product.interface';
+import { Product } from './product.model';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
@@ -69,7 +70,7 @@ const updateProduct = async (req: Request, res: Response) => {
     const productExist =
       await ProductServices.getSingleProductFromDB(productId);
 
-    if (!productExist) {
+    if (!(await Product.isProductExists(productId))) {
       return ERROR(res, null, 'Product not found!');
     }
 

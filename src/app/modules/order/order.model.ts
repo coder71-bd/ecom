@@ -73,4 +73,8 @@ orderSchema.post('save', async function (doc) {
   await updateStock(doc.productId, doc.quantity);
 });
 
+orderSchema.statics.isOrderExists = async function (orderId: string) {
+  return Order.findOne({ orderId });
+};
+
 export const Order = model<TOrder, OrderModel>('Order', orderSchema);

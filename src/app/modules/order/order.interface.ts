@@ -8,4 +8,6 @@ export type TOrder = {
   quantity: number;
 };
 
-export interface OrderModel extends Model<TOrder> {}
+export interface OrderModel extends Model<TOrder> {
+  isOrderExists(productId: string): Promise<TOrder | null>;
+}

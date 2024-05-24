@@ -21,4 +21,6 @@ export type TProduct = {
   inventory: TInventory;
 };
 
-export interface ProductModel extends Model<TProduct> {}
+export interface ProductModel extends Model<TProduct> {
+  isProductExists(productId: string): Promise<TProduct | null>;
+}

@@ -68,4 +68,8 @@ const productSchema = new Schema<TProduct, ProductModel>(
   },
 );
 
+productSchema.statics.isProductExists = async function (productId: string) {
+  return Product.findOne({ productId });
+};
+
 export const Product = model<TProduct, ProductModel>('Product', productSchema);
