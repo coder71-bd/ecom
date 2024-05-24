@@ -13,6 +13,7 @@ const ERROR = (
   data: unknown,
   message = 'Something went wrong!',
   success = false,
+  statusCode = 500,
 ) => {
   res.status(500).json({
     success,

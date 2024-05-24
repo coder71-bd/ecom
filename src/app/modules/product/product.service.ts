@@ -2,8 +2,8 @@ import { FilterQuery } from 'mongoose';
 import { Product } from './product.model';
 import { TProduct } from './product.interface';
 
-const createProductIntoDB = async (orderData: TProduct) => {
-  return Product.create(orderData);
+const createProductIntoDB = async (productData: TProduct) => {
+  return Product.create(productData);
 };
 
 const getAllProductsFromDB = async (query: FilterQuery<TProduct>) => {
@@ -16,9 +16,9 @@ const getSingleProductFromDB = async (productId: string) => {
 
 const updateProductIntoDB = async (
   productId: string,
-  orderData: Partial<TProduct>,
+  productData: Partial<TProduct>,
 ) => {
-  return Product.findOneAndUpdate({ productId }, orderData);
+  return Product.findOneAndUpdate({ productId }, productData);
 };
 
 const deleteProductFromDB = async (productId: string) => {

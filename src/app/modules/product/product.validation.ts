@@ -13,7 +13,7 @@ const inventoryValidationSchema = z.object({
   inStock: z.boolean().optional().default(true),
 });
 
-const productValidationSchema = z.object({
+const createProductValidationSchema = z.object({
   productId: z
     .string()
     .uuid({ message: 'Product ID must be a valid UUID' })
@@ -30,6 +30,26 @@ const productValidationSchema = z.object({
   inventory: inventoryValidationSchema,
 });
 
-export const validateProduct = (data: unknown) => {
-  return productValidationSchema.parse(data);
+const updateProductValidationSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }).optional(),
+  description: z
+    .string()
+    .min(1, { message: 'Description is required' })
+    .optional(),
+  price: z
+    .number()
+    .min(0, { message: 'Price cannot be less than 0' })
+    .optional(),
+  tags: z.array(z.string()).optional(),
+  category: z.string().min(1, { message: 'Category is required' }).optional(),
+  variants: z.array(variantValidationSchema).optional(),
+  inventory: inventoryValidationSchema.optional(),
+});
+
+export const validateCreateProduct = (data: unknown) => {
+  return createProductValidationSchema.parse(data);
+};
+
+export const validateUpdateProduct = (data: unknown) => {
+  return updateProductValidationSchema.parse(data);
 };

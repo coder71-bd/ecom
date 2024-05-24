@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { validateProduct } from './product.validation';
+import { validateCreateProduct } from './product.validation';
 import { ProductServices } from './product.service';
 import { ERROR, OK } from '../../utils/responseHelper';
 import { FilterQuery } from 'mongoose';
@@ -8,7 +8,7 @@ import { TProduct } from './product.interface';
 const createProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body;
-    const zodParsedData = validateProduct(productData);
+    const zodParsedData = validateCreateProduct(productData);
     const result = await ProductServices.createProductIntoDB(zodParsedData);
     return OK(res, result, 'Product created successfully!');
   } catch (err: any) {
