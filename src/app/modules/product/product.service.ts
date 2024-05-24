@@ -7,7 +7,7 @@ const createProductIntoDB = async (orderData: TProduct) => {
 };
 
 const getAllProductsFromDB = async (query: FilterQuery<TProduct>) => {
-  return Product.find({ ...query, isDeleted: false });
+  return Product.find({ ...query });
 };
 
 const getSingleProductFromDB = async (productId: string) => {

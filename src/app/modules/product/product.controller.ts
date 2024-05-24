@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { validateProduct } from './product.validation';
 import { ProductServices } from './product.service';
 import { ERROR, OK } from '../../utils/responseHelper';
+import { FilterQuery } from 'mongoose';
+import { TProduct } from './product.interface';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
@@ -16,10 +18,22 @@ const createProduct = async (req: Request, res: Response) => {
 
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const query = req.query;
-    const result = await ProductServices.getAllProductsFromDB(query);
+    const { searchTerm } = req.query;
+    const body: FilterQuery<TProduct> = {};
 
-    return OK(res, result, 'Products fetched successfully!');
+    if (searchTerm) {
+      body.$or = [{ name: new RegExp(searchTerm as string, 'i') }];
+    }
+
+    const result = await ProductServices.getAllProductsFromDB(body);
+
+    return OK(
+      res,
+      result,
+      searchTerm
+        ? `Products matching search term ${searchTerm} fetched successfully!`
+        : 'Products fetched successfully!',
+    );
   } catch (err: any) {
     return ERROR(res, err, err.message);
   }
